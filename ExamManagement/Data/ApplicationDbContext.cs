@@ -12,6 +12,8 @@ namespace ExamManagement.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+            // Apply pending migrations if there is any
+            Database.Migrate();
         }
 
         public DbSet<Admin> Admins { get; set; }
