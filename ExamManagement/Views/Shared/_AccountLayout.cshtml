@@ -1,0 +1,20 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ExamManagement</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row align">
+            <div class="d-none d-lg-block col-lg-5 bg-danger h-100" style="min-height: 100vh"></div>
+            <div class="row col-12 col-lg-7 flex-grow-1 h-100" style="min-height: 100vh">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+</body>
+</html>
