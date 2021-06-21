@@ -1,16 +1,28 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ExamManagement.Data;
+using ExamManagement.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ExamManagement.Controllers
 {
-    public class SubjectsController : Controller
+    public class SubjectsController : BaseController
     {
-        public IActionResult Index()
+        public SubjectsController(ApplicationDbContext dbContext)
         {
-            return View();
+            db = dbContext;
         }
+        public IActionResult Index() => View(db.Subjects);
+
+
+        public async Task<ActionResult> New(Subject subject)
+        {
+            subject = new Subject { Name = subject.Name };
+            await db.Subjects.AddAsync(subject);
+            await db.SaveChangesAsync();
+
+            return RedirectToAction("Index");
+        }
+
     }
 }
