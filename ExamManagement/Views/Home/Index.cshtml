@@ -1,10 +1,39 @@
-﻿@{
+﻿@model AdminDashboardViewModel
+@{
     ViewData["Title"] = "Home Page";
     ViewBag.Page1 = "Dashboard";
-    ViewBag.Page2 = "Dashboard";
-    ViewBag.Page3 = "Dashboard";
 }
 
-<div class="text-center">
-    Dashboard, @User.Identity.Name
+<div class="row">
+    <div class="col-12 col-sm-6">
+        <div class="card card-custom card-stretch gutter-b">
+
+            <div class="card-header border-0">
+                <h3 class="card-title font-weight-bolder text-dark">Courses</h3>
+                <div class="card-toolbar">
+                    <span>asfdsdfd</span>
+                </div>
+            </div>
+
+            <div class="card-body pt-2">
+                <span>@Model.Courses.Count() courses</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-sm-6">
+        <div class="card card-custom card-stretch gutter-b">
+
+            <div class="card-header border-0">
+                <h3 class="card-title font-weight-bolder text-dark">Subjects</h3>
+                <div class="card-toolbar">
+                    <span>asfdsdfd</span>
+                </div>
+            </div>
+
+            <div class="card-body pt-2">
+                <span>@Model.Subjects.Count() subjects</span>
+            </div>
+        </div>
+    </div>
 </div>

@@ -1,26 +1,35 @@
-﻿using ExamManagement.Models;
+﻿using ExamManagement.Data;
+using ExamManagement.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
 namespace ExamManagement.Controllers
 {
-    
+
+    [Authorize(Roles ="Admin")]
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly UserManager<IdentityUser> userManager;
+        private readonly ApplicationDbContext db;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(UserManager<IdentityUser> userManager, ApplicationDbContext db)
         {
-            _logger = logger;
+            this.userManager = userManager;
+            this.db = db;
         }
 
-        [Authorize]
-        public ActionResult Index()
+        public async  Task<ActionResult> Index()
         {
+            var model = new AdminDashboardViewModel
+            {
+                User = await userManager.GetUserAsync(User),
+                Courses = db.Courses,
+                Subjects = db.Subjects
+            };
             
-            var u = User;
-            return View();
+            return View(model);
         }
 
     }
