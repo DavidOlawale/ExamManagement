@@ -24,7 +24,7 @@ namespace ExamManagement
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => {
+            services.AddIdentity<IdentityUser, IdentityRole>(options => {
                 options.Password.RequireDigit = false;
                 options.Password.RequireLowercase = false;
                 options.Password.RequireNonAlphanumeric = false;
@@ -34,12 +34,12 @@ namespace ExamManagement
             })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            .AddCookie(options =>
-            {
-                options.LoginPath = "/Account/signIn";
-                options.LogoutPath = "/Account/SignOut";
-            });
+            //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            //.AddCookie(options =>
+            //{
+            //    options.LoginPath = "/Account/LogIn";
+            //    options.LogoutPath = "/Account/SignOut";
+            //});
 
             //services.Configure<CookieAuthenticationOptions>(opt =>
             //{
@@ -54,9 +54,11 @@ namespace ExamManagement
         public void Configure(IApplicationBuilder app,
             IWebHostEnvironment env,
             ApplicationDbContext context,
-            UserManager<IdentityUser> userManager)
+            UserManager<IdentityUser> userManager,
+            RoleManager<IdentityRole> roleManager
+            )
         {
-            new DbInitializer(context, userManager).InitializerAsync().Wait();
+            new DbInitializer(context, userManager, roleManager).InitializerAsync().Wait();
 
             if (env.IsDevelopment())
             {

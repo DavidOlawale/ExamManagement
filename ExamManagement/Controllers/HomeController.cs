@@ -18,19 +18,9 @@ namespace ExamManagement.Controllers
         [Authorize]
         public ActionResult Index()
         {
-            if (User.Identity.IsAuthenticated)
-            {
-                return Content("authenticated");
-            }
-            else
-            {
-                return Content("Not auth");
-            }
+            
             var u = User;
             return View();
-            
-            return RedirectToAction("SignIn", "Account");
-            
         }
 
     }

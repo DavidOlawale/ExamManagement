@@ -15,17 +15,19 @@ namespace ExamManagement.Controllers
             this.userManager = userManager;
             this.signInManager = signInManager;
         }
-        public IActionResult SignIn() => View();
+
+        public IActionResult LogIn() => View();
         
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
-        public async Task<ActionResult> SignIn(SignInModel signInModel)
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> LogIn(SignInModel signInModel, string returnUrl)
         {
+            returnUrl = returnUrl ?? Url.Content("~/");
             var result = await signInManager.PasswordSignInAsync(signInModel.Email, signInModel.Password, signInModel.keepSignedIn, false);
             if (result.Succeeded)
-                //return new RedirectToActionResult("Index", "Home", null);
-                return RedirectToAction("Index", "Home");
+                //return new Redi +rectToActionResult("Index", "Home", null);
+                return LocalRedirect(returnUrl);
 
             ModelState.AddModelError("", "Invalid SignIn attempt");
             return View();

@@ -11,10 +11,13 @@ namespace ExamManagement.Data
     {
         private ApplicationDbContext dbContext;
         private UserManager<IdentityUser> userManager;
-        public DbInitializer(ApplicationDbContext dbContext, UserManager<IdentityUser> userManager)
+        private readonly RoleManager<IdentityRole> roleManager;
+
+        public DbInitializer(ApplicationDbContext dbContext, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             this.dbContext = dbContext;
             this.userManager = userManager;
+            this.roleManager = roleManager;
         }
         public async Task InitializerAsync()
         {
@@ -25,7 +28,12 @@ namespace ExamManagement.Data
                 UserName = "admin@app.com"
             };
 
-            await userManager.CreateAsync(admin, "password@123#");
+            var res = await userManager.CreateAsync(admin, "password@123#");
+            if (res.Succeeded)
+            {
+                await roleManager.CreateAsync(new IdentityRole("Admin"));
+                await userManager.AddToRoleAsync(admin, "Admin");
+            }
             
         }
     }
