@@ -34,7 +34,7 @@
                     @foreach (var s in Model.OrderByDescending(s => s.CreatedOn))
                     {
                         <tr>
-                            <td> <a asp-action="details">@s.Name</a></td>
+                            <td> <a asp-action="details" asp-route-id="@s.Id">@s.Name</a></td>
                             <td>@s.SubjectCourses.Count()</td>
                             <td>@s.CreatedOn.ToShortDateString()</td>
                         </tr>

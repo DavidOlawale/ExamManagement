@@ -1,4 +1,81 @@
-﻿@*@model IEnumerable<Subject>*@
+﻿@model IEnumerable<Course>
 @{
-    ViewBag.Title = "Subejcts";
+    ViewBag.Title = "Courses";
 }
+
+<div class="container-fluid">
+    <div class="card card-custom min-h-450px">
+        <div class="card-header flex-wrap py-5">
+            <div class="card-title">
+                <h3 class="card-label">
+                    Courses
+
+                </h3>
+            </div>
+            <div class="card-toolbar">
+
+                <button class="btn btn-primary font-weight-bolder" data-toggle="modal" data-target="#newCourseModal">
+                    <i class="fa fa-plus"></i> New Course
+                </button>
+
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="table table-separate table-head-custom table-checkable" id="kt_datatable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>No of subjects</th>
+                        <th>Created On</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var s in Model.OrderByDescending(s => s.CreatedOn))
+                    {
+                        <tr>
+                            <td> <a asp-action="details" asp-route-id="@s.Id">@s.Name</a></td>
+                            <td>@s.CourseSubjects.Count()</td>
+                            <td>@s.CreatedOn.ToShortDateString()</td>
+                        </tr>
+                    }
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- Create new course Modal-->
+<div class="modal fade" id="newCourseModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form asp-controller="courses" asp-action="new">
+
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">New Course</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input class="form-control" required minlength="3" maxlength="20" name="name" placeholder="course name" />
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary font-weight-bold">Create subject</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
