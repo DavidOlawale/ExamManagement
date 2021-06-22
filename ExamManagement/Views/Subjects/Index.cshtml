@@ -4,12 +4,12 @@
 }
 
 <div class="container-fluid">
-    <div class="card card-custom">
+    <div class="card card-custom min-h-450px">
         <div class="card-header flex-wrap py-5">
             <div class="card-title">
                 <h3 class="card-label">
                     Subjects
-                    <span class="d-block text-muted pt-2 font-size-sm">extended pagination options</span>
+                    
                 </h3>
             </div>
             <div class="card-toolbar">
@@ -26,15 +26,17 @@
                     <tr>
                         <th>Name</th>
                         <th>No of courses</th>
+                        <th>Created On</th>
 
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var s in Model)
+                    @foreach (var s in Model.OrderByDescending(s => s.CreatedOn))
                     {
                         <tr>
-                            <td>@s.Name</td>
-                            <td>@s.SubjectCourses</td>
+                            <td> <a asp-action="details">@s.Name</a></td>
+                            <td>@s.SubjectCourses.Count()</td>
+                            <td>@s.CreatedOn.ToShortDateString()</td>
                         </tr>
                     }
 
@@ -52,19 +54,28 @@
 <div class="modal fade" id="newSubjectModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal Title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <i aria-hidden="true" class="ki ki-close"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                ...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary font-weight-bold">Save changes</button>
-            </div>
+            <form asp-controller="subjects" asp-action="new">
+
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">New subject</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input class="form-control" required minlength="3" maxlength="20" name="name" placeholder="subject name" />
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary font-weight-bold">Create subject</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

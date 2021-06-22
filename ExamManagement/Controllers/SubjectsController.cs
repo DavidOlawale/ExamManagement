@@ -17,12 +17,14 @@ namespace ExamManagement.Controllers
 
         public async Task<ActionResult> New(Subject subject)
         {
-            subject = new Subject { Name = subject.Name };
+            subject = new Subject { Name = subject.Name, CreatedOn = DateTime.Now };
             await db.Subjects.AddAsync(subject);
             await db.SaveChangesAsync();
 
             return RedirectToAction("Index");
         }
+
+        public ActionResult Details(int id) => View(db.Subjects.Find(id));
 
     }
 }

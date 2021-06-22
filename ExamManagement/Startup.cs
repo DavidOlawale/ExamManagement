@@ -1,5 +1,4 @@
 using ExamManagement.Data;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -22,8 +21,10 @@ namespace ExamManagement
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
+                options.UseLazyLoadingProxies()
+                .UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddIdentity<IdentityUser, IdentityRole>(options => {
                 options.Password.RequireDigit = false;
                 options.Password.RequireLowercase = false;

@@ -4,14 +4,16 @@ using ExamManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ExamManagement.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210622121210_add-student-details")]
+    partial class addstudentdetails
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,9 +37,6 @@ namespace ExamManagement.Data.Migrations
                         .HasMaxLength(20);
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
 
                     b.ToTable("Courses");
                 });
@@ -108,9 +107,6 @@ namespace ExamManagement.Data.Migrations
                         .HasMaxLength(20);
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
 
                     b.ToTable("Subjects");
                 });
@@ -340,10 +336,6 @@ namespace ExamManagement.Data.Migrations
 
                     b.Property<DateTime>("RegistrationDate")
                         .HasColumnType("datetime2");
-
-                    b.HasIndex("FirstName", "LastName")
-                        .IsUnique()
-                        .HasFilter("[FirstName] IS NOT NULL AND [LastName] IS NOT NULL");
 
                     b.ToTable("Students");
 

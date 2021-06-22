@@ -1,4 +1,5 @@
-﻿using ExamManagement.Models;
+﻿
+using ExamManagement.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -12,7 +13,7 @@ namespace ExamManagement.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
-            // Apply pending migrations if there is any
+            // Apply pending migrations if there are any
             Database.Migrate();
         }
 
@@ -21,5 +22,24 @@ namespace ExamManagement.Data
         public DbSet<Course> Courses { get; set; }
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<CourseSubject> CourseSubjects { get; set; }
+        public DbSet<StudentCourse> StudentCourses { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<Student>()
+                .HasIndex(p => new { p.FirstName, p.LastName })
+                .IsUnique();
+
+            builder.Entity<Subject>()
+                .HasIndex(p => p.Name)
+                .IsUnique();
+
+            builder.Entity<Course>()
+                .HasIndex(p => p.Name)
+                .IsUnique();
+        }
     }
+
 }
