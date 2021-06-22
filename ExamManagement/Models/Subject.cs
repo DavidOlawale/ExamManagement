@@ -13,6 +13,8 @@ namespace ExamManagement.Models
         [Required, MaxLength(20), MinLength(3)]
         public string Name { get; set; }
 
-        public Course SubjectCourses { get; set; }
+        [Required]
+        public DateTime CreatedOn { get; set; }
+        public virtual IEnumerable<CourseSubject> SubjectCourses { get; set; }
     }
 }
