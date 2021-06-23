@@ -1,40 +1,142 @@
 ﻿@model Course
+@inject ApplicationDbContext db
 
 @{
+    ViewBag.Page1 = "Courses";
+    ViewBag.Page2 = "Details";
+    ViewBag.Page3 = Model.Name;
     ViewBag.Title = Model.Name;
+    var otherSubjects = db.Subjects.ToList().Except(Model.Subjects);
 }
 
 <div class="container-fluid">
     <div class="card card-custom min-h-450px">
         <div class="card-body">
+            <h4 class="mb-5">@Model.Name</h4>
 
-            <ul class="nav nav-tabs" id="myTabContent" role="tablist">
+            <ul class="nav nav-tabs separator-tabs ml-0 mb-5" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" href="#">Details</a>
+                    <a class="nav-link active" id="first-tab" data-toggle="tab" href="#first" role="tab"
+                       aria-controls="first" aria-selected="false">COURSE DETAILS</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#subjects">Subjects</a>
+                    <a class="nav-link" id="second-tab" data-toggle="tab" href="#second" role="tab"
+                       aria-controls="second" aria-selected="false">SUBJETS</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#exams" tabindex="-1">Exams</a>
+                    <a class="nav-link" id="third-tab" data-toggle="tab" href="#third" role="tab"
+                       aria-controls="second" aria-selected="false">EXAMS</a>
                 </li>
+
             </ul>
-            <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+
+            <div class="tab-content">
+                <div class="tab-pane show active" id="first" role="tabpanel" aria-labelledby="first-tab">
+                    <div class="">
+
+
+                    </div>
+                </div>
+                <div class="tab-pane" id="second" role="tabpanel" aria-labelledby="second-tab">
+                    <div class="row">
+                        <div class="col-8">
+                            <p>Subjects attached to <span class="font-weight-bold">@Model.Name</span></p>
+
+                            @if (!db.Subjects.Any())
+                            {
+                                <p class="muted">You have not created any subject. <button class="btn btn-link" data-toggle="modal" data-target="#newSubjectModal">Create one now</button></p>
+                            }
+                            else
+                            {
+                                <ul class="list-group">
+                                    @foreach (var s in Model.Subjects)
+                                    {
+                                        <li class="list-group-item">
+                                            <div class="row">
+                                                <div class="col-8">@s.Name</div>
+                                                <div class="col-4">
+                                                    <a class="btn btn-danger" asp-action="RemoveSubject" asp-route-CourseId="@Model.Id" asp-route-SubjectId="@s.Id">Remove course</a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    }
+
+                                </ul>
+
+
+                                <h4 class="mt-5">Add new subject</h4>
+
+                                <ul class="list-group">
+                                    @foreach (var s in otherSubjects)
+                                    {
+                                        <li class="list-group-item">
+                                            <div class="row">
+                                                <div class="col-8">@s.Name</div>
+                                                <div class="col-4">
+                                                    <a class="btn btn-primary" asp-action="AddSubject" asp-route-CourseId="@Model.Id" asp-route-SubjectId="@s.Id">Add course</a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    }
+                                </ul>
+
+                            }
+
+                        </div>
+                    </div>
 
                 </div>
-                <div class="tab-pane fade" id="subjects" role="tabpanel" aria-labelledby="pills-profile-tab">
-                    <p>Subjects attached to <span class="font-weight-bold">@Model.Name</span></p>
 
-                    <table>
+                <div class="tab-pane" id="third" role="tabpanel" aria-labelledby="third-tab">
+                    <div class="row">
+                        <div class="col-12">
 
-                    </table>
+                            third tab
+
+                        </div>
+                    </div>
+
                 </div>
-                <div class="tab-pane fade" id="exams" role="tabpanel" aria-labelledby="pills-contact-tab">
 
-                </div>
             </div>
         </div>
     </div>
 
+</div>
+
+
+
+
+
+
+
+
+<!-- Create new subject Modal-->
+<div class="modal fade" id="newSubjectModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form asp-controller="subjects" asp-action="new">
+
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">New subject</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input class="form-control" required minlength="3" maxlength="20" name="name" placeholder="subject name" />
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary font-weight-bold">Create subject</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
