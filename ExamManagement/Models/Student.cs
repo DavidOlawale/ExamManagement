@@ -10,11 +10,11 @@ namespace ExamManagement.Models
     [Table("Students")]
     public class Student : IdentityUser
     {
-        [Required, MinLength(3), MaxLength(15)]
-        public int FirstName { get; set; }
+        [Required, MinLength(3), MaxLength(15), Display(Name ="First Name")]
+        public string FirstName { get; set; }
 
-        [Required, MinLength(3), MaxLength(15)]
-        public int LastName { get; set; }
+        [Required, MinLength(3), MaxLength(15), Display(Name = "Last Name")]
+        public string LastName { get; set; }
 
         [Required]
         public DateTime RegistrationDate { get; set; }

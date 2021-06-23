@@ -32,6 +32,7 @@ namespace ExamManagement.Data
             if (res.Succeeded)
             {
                 await roleManager.CreateAsync(new IdentityRole("Admin"));
+                await roleManager.CreateAsync(new IdentityRole("Student"));
                 await userManager.AddToRoleAsync(admin, "Admin");
             }
             

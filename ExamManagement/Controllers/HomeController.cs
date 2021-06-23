@@ -18,6 +18,9 @@ namespace ExamManagement.Controllers
 
         public async  Task<ActionResult> Index()
         {
+            if (User.IsInRole("Student"))
+                return RedirectToAction("Index", "Home", new { Area = "Student" });
+            
             var model = new AdminDashboardViewModel
             {
                 User = await userManager.GetUserAsync(User),

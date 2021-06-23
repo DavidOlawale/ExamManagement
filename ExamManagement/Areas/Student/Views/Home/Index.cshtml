@@ -1,0 +1,52 @@
+﻿@model Student
+
+
+<h3>Hello, @User.Identity.Name</h3>
+<div class="row" style="margin-top: 3rem;">
+    <div class="col-8">
+        <p>My Details</p>
+        <hr />
+        <div class="card">
+            <div class="card-body">
+                
+                <table class="table table-borderless">
+                    <tr>
+                        <td>First Name</td>
+                        <td><input class="form-control" disabled value="@Model.FirstName" /></td>
+                    </tr>
+                    <tr>
+                        <td>Lasr Name</td>
+                        <td><input class="form-control" disabled value="@Model.LastName" /></td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td><input class="form-control" disabled value="@Model.Email" /></td>
+                    </tr>
+                    <tr>
+                        <td>My Course</td>
+                        <td><input class="form-control" disabled value="@Model.StudentCourses.First().Course.Name" /></td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td><input class="form-control" disabled value="@Model.Email" /></td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-4">
+        <p>Upcoming Activities</p>
+        <hr />
+        <div class="card">
+            <div class="card-body">
+                <p class="font-weight-bold">Exam</p>
+
+                <p class="text-muted">You do not have any upcoming exam</p>
+
+                <a asp-controller="exam">View past exams</a>
+            </div>
+        </div>
+    </div>
+</div>
+        
