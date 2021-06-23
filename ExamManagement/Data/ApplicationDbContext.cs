@@ -39,6 +39,10 @@ namespace ExamManagement.Data
             builder.Entity<Course>()
                 .HasIndex(p => p.Name)
                 .IsUnique();
+
+            builder.Entity<CourseSubject>()
+                .HasIndex(p => new { p.CourseId, p.SubjectId })
+                .IsUnique();
         }
     }
 
