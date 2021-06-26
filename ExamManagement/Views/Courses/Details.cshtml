@@ -6,7 +6,7 @@
     ViewBag.Page2 = "Details";
     ViewBag.Page3 = Model.Name;
     ViewBag.Title = Model.Name;
-    var otherSubjects = db.Subjects.ToList().Except(Model.Subjects);
+    var otherSubjects = db.Subjects.ToList().Except(Model.CourseSubjects.Select(s => s.Subject));
 }
 
 <div class="container-fluid">
@@ -21,41 +21,69 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="second-tab" data-toggle="tab" href="#second" role="tab"
-                       aria-controls="second" aria-selected="false">SUBJETS</a>
+                       aria-controls="second" aria-selected="false">SUBJECTS</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="third-tab" data-toggle="tab" href="#third" role="tab"
+                       aria-controls="second" aria-selected="false">STUDENTS</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="fourth-tab" data-toggle="tab" href="#fourth" role="tab"
                        aria-controls="second" aria-selected="false">EXAMS</a>
                 </li>
 
             </ul>
 
             <div class="tab-content">
-                <div class="tab-pane show active" id="first" role="tabpanel" aria-labelledby="first-tab">
-                    <div class="">
+                <div class="tab-pane show active p-4" id="first" role="tabpanel" aria-labelledby="first-tab">
+                    <div class="col-11">
+                        <div class="row text-center ">
+                            <div class="col-3">
+                                <p class="text-muted mb-2">Course Name</p>
+                                <p class="mb-5">@Model.Name</p>
+                            </div>
 
+                            <div class="col-3">
+                                <p class="text-muted mb-2">Created On</p>
+                                <p class="mb-5">@Model.CreatedOn.ToLongDateString()</p>
+                            </div>
+
+                            <div class="col-3">
+                                <p class="text-muted mb-2">No Of Subjects</p>
+                                <p class="mb-5">@Model.CourseSubjects.Select(s => s.Subject).Count()</p>
+                            </div>
+
+                            <div class="col-3">
+                                <p class="text-muted mb-2">No Of Students</p>
+                                <p class="mb-5">@Model.StudentCourses.Select(s => s.Student).Count()</p>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="p-5 mx-5">
+                        Actions
+                        <hr />
+                        <a @*asp-action="DeleteCourse" asp-route-id="@Model.Id"*@ class="btn btn-danger">Delete Coure</a>
 
                     </div>
                 </div>
                 <div class="tab-pane" id="second" role="tabpanel" aria-labelledby="second-tab">
-                    <div class="row">
-                        <div class="col-8">
-                            <p>Subjects attached to <span class="font-weight-bold">@Model.Name</span></p>
+                    <div class="row mx-3">
+                        <div class="col-12 d-block">
+                            <div class="d-flex">
+                                <button class="btn btn-primary ml-auto" data-toggle="modal" data-target="#newSubjectModal">Add Subject</button>
+                            </div>
+                            <br />
 
-                            @if (!db.Subjects.Any())
-                            {
-                                <p class="muted">You have not created any subject. <button class="btn btn-link" data-toggle="modal" data-target="#newSubjectModal">Create one now</button></p>
-                            }
-                            else
-                            {
                                 <ul class="list-group">
-                                    @foreach (var s in Model.Subjects)
+                                    @foreach (var s in Model.CourseSubjects.Select(s => s.Subject))
                                     {
                                         <li class="list-group-item">
                                             <div class="row">
-                                                <div class="col-8">@s.Name</div>
-                                                <div class="col-4">
-                                                    <a class="btn btn-danger" asp-action="RemoveSubject" asp-route-CourseId="@Model.Id" asp-route-SubjectId="@s.Id">Remove course</a>
+                                                <div class="col-10">@s.Name</div>
+                                                <div class="col-2 d-flex">
+                                                    <a class="ml-auto" asp-action="RemoveSubject" asp-route-CourseId="@Model.Id" asp-route-SubjectId="@s.Id"><i class="fa fa-cross text-danger"></i></a>
                                                 </div>
                                             </div>
                                         </li>
@@ -64,23 +92,7 @@
                                 </ul>
 
 
-                                <h4 class="mt-5">Add new subject</h4>
-
-                                <ul class="list-group">
-                                    @foreach (var s in otherSubjects)
-                                    {
-                                        <li class="list-group-item">
-                                            <div class="row">
-                                                <div class="col-8">@s.Name</div>
-                                                <div class="col-4">
-                                                    <a class="btn btn-primary" asp-action="AddSubject" asp-route-CourseId="@Model.Id" asp-route-SubjectId="@s.Id">Add course</a>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    }
-                                </ul>
-
-                            }
+                                
 
                         </div>
                     </div>
@@ -88,11 +100,37 @@
                 </div>
 
                 <div class="tab-pane" id="third" role="tabpanel" aria-labelledby="third-tab">
-                    <div class="row">
+                    <div class="row mx-3">
                         <div class="col-12">
 
-                            third tab
+                            <table class="table mt-5">
+                                <tr>
+                                    <th>Student Name</th>
+                                    <th>Email</th>
+                                    <th>Registration Date</th>
+                                </tr>
+                                @foreach (var s in Model.StudentCourses.Select(s => s.Student))
+                                {
+                                    <tr>
+                                        <td>@s.FirstName @s.LastName</td>
+                                        <td>@s.Email</td>
+                                        <td>@s.RegistrationDate.ToLongDateString()</td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+                    </div>
 
+                </div>
+
+                <div class="tab-pane" id="fourth" role="tabpanel" aria-labelledby="fourth-tab">
+                    <div class="row mx-3">
+                        <div class="col-10">
+
+                            <a href="#" class="btn btn-primary  float-right">Schedule New Eam</a>
+
+                            <p style="margin-top: 3rem;">Past Exams</p>
+                            <p class="mt-5 text-muted">No exam has been taken for <span class="font-weight-bolder">@Model.Name</span></p>
                         </div>
                     </div>
 
@@ -137,6 +175,23 @@
                     <button type="submit" class="btn btn-primary font-weight-bold">Create subject</button>
                 </div>
             </form>
+
+
+            <p style="margin-top: 3rem">Add new subject</p>
+
+            <ul class="list-group">
+                @foreach (var s in otherSubjects)
+                {
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-9">@s.Name</div>
+                            <div class="col-3">
+                                <a class="btn btn-primary" asp-action="AddSubject" asp-route-CourseId="@Model.Id" asp-route-SubjectId="@s.Id">Add course</a>
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ul>
         </div>
     </div>
 </div>

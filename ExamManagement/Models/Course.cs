@@ -18,9 +18,7 @@ namespace ExamManagement.Models
         public DateTime CreatedOn { get; set; }
         public virtual  IEnumerable<CourseSubject> CourseSubjects { get; set; }
 
-        [NotMapped]
-        public IEnumerable<Subject> Subjects => CourseSubjects.Select(sc => sc.Subject);
-
+        public virtual IEnumerable<StudentCourse> StudentCourses { get; set; }
 
     }
 }

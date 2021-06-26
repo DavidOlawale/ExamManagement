@@ -65,5 +65,16 @@ namespace ExamManagement.Controllers
 
             return RedirectToAction("Details", new { id = courseId });
         }
+
+        public async Task<ActionResult> DeleteCourse(int id)
+        {
+            var course = await db.Courses.FindAsync(id);
+            if (course != null)
+            {
+                db.Courses.Remove(course);
+                await db.SaveChangesAsync();
+            }
+            return View("Index");
+        }
     }
 }
