@@ -69,10 +69,8 @@ namespace ExamManagement.Controllers
         public async Task<ActionResult> Register(StudentRegisterViewModel model)
         {
             model.CourseSelectList = new SelectList(db.Courses, "Id", "Name", "Select Course");
-            if (model.Password != model.ConfirmPassword)
-            {
-                return View(model);
-            }
+
+            if (model.Password != model.ConfirmPassword) return View(model);
 
             if (db.Users.ToList().Any(u => u.Email.Equals(model.Student.Email, StringComparison.OrdinalIgnoreCase)))
             {
