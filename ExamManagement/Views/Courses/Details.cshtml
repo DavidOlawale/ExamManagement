@@ -7,6 +7,14 @@
     ViewBag.Page3 = Model.Name;
     ViewBag.Title = Model.Name;
     var otherSubjects = db.Subjects.ToList().Except(Model.CourseSubjects.Select(s => s.Subject));
+
+
+    var viewModel = new CreateExamScheduleViewModel
+    {
+        CourseId = Model.Id,
+        Subjects = Model.CourseSubjects.Select(s => new ExamManagement.ViewModels.ExamScheduleSubject{SubjectId = s.SubjectId, SubjectName = s.Subject.Name } ).ToList()
+    };
+
 }
 
 <div class="container-fluid">
@@ -126,6 +134,10 @@
 
                             <button data-toggle="modal" data-target="#scheduleExamModal" class="btn btn-primary">Schedule new exam</button>
 
+                            @if (!Model.ExamSchedules.Any())
+                            {
+
+                            }
                             <p style="margin-top: 3rem;">Past Exams</p>
                             <p class="mt-5 text-muted">No exam has been taken for <span class="font-weight-bolder">@Model.Name</span></p>
                         </div>
@@ -183,7 +195,7 @@
 <div class="modal fade" id="scheduleExamModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form asp-controller="courses" asp-action="addSubject">
+            <form asp-controller="courses" asp-action="ScheduleExam">
 
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Schedule an exam for <b>@Model.Name</b></h5>
@@ -192,17 +204,37 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    @Html.HiddenFor(m => viewModel.CourseId)
 
                     <div class="form-group">
-                        <input class="form-control" required minlength="3" maxlength="20" name="subjectName" placeholder="subject name" />
-                        <small class="text-muted">Subject will be added to <b>@Model.Name</b> if it it exits, else, it'll be created</small>
+                        <label for="scheduleDate">Exam date and time</label>
+                        <input class="form-control" id="scheduleDate" required type="datetime-local" value="" name="viewModel.ExamDate" />
                     </div>
-                    <input name="courseId" value="@Model.Id" class="d-none" />
+
+                    <div class="form-group">
+                        <label for="scheduleVenue">Exam venue</label>
+                        <textarea class="form-control" id="scheduleVenue" required name="viewModel.ExamVenue" rows="4"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Select subjects</label> <br />
+                        @*<small class="text-muted">Subjects to include in this exam</small>*@
+
+                        @for (int i = 0; i < viewModel.Subjects.Count; i++)
+                        {
+                            <div class="d-block">
+                                @Html.CheckBoxFor(m => viewModel.Subjects[i].IsAdded, new { id=$"subject_{i}" })
+                                @Html.HiddenFor(m => viewModel.Subjects[i].SubjectId)
+                                <label for="@($"subject_{i}")">@viewModel.Subjects[i].SubjectName</label>
+                            </div>
+                        } 
+
+                    </div>
 
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary font-weight-bold">Add subject</button>
+                    <button type="submit" class="btn btn-primary font-weight-bold">Create schedule</button>
                 </div>
             </form>
 

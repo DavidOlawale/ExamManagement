@@ -1,5 +1,6 @@
 ﻿using ExamManagement.Data;
 using ExamManagement.Models;
+using ExamManagement.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -84,6 +85,27 @@ namespace ExamManagement.Controllers
                 await db.SaveChangesAsync();
             }
             return View("Index");
+        }
+
+        public async Task<ActionResult> ScheduleExam(CreateExamScheduleViewModel viewModel)
+        {
+            var examSchedule = new ExamSchedule
+            {
+                CourseId = viewModel.CourseId,
+                ExamDate = viewModel.ExamDate,
+                ExamVenue = viewModel.ExamVenue
+            };
+            db.ExamSchedules.Add(examSchedule);
+            await db.SaveChangesAsync();
+
+            foreach (var subject in viewModel.Subjects)
+            {
+                if (subject.IsAdded)
+                    db.ExamScheduleSubjects.Add(new Models.ExamScheduleSubject { ExamScheduleId = examSchedule.Id, SubjectId= subject.SubjectId });
+            }
+
+            await db.SaveChangesAsync();
+            return RedirectToAction("Details", new {id= viewModel.CourseId });
         }
     }
 }

@@ -19,6 +19,7 @@ namespace ExamManagement.Models
         public virtual  IEnumerable<CourseSubject> CourseSubjects { get; set; }
 
         public virtual IEnumerable<StudentCourse> StudentCourses { get; set; }
+        public virtual IEnumerable<ExamSchedule> ExamSchedules { get; set; }
 
     }
 }
