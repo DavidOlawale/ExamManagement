@@ -83,7 +83,7 @@
                                             <div class="row">
                                                 <div class="col-10">@s.Name</div>
                                                 <div class="col-2 d-flex">
-                                                    <a class="ml-auto" asp-action="RemoveSubject" asp-route-CourseId="@Model.Id" asp-route-SubjectId="@s.Id"><i class="fa fa-cross text-danger"></i></a>
+                                                    <a class="ml-auto" asp-action="RemoveSubject" asp-route-CourseId="@Model.Id" asp-route-SubjectId="@s.Id"><i class="fa fa-times text-danger"></i></a>
                                                 </div>
                                             </div>
                                         </li>
@@ -153,11 +153,10 @@
 <div class="modal fade" id="newSubjectModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form asp-controller="subjects" asp-action="new">
-
+            <form asp-controller="courses" asp-action="addSubject">
 
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">New subject</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add subject to <b>@Model.Name</b></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <i aria-hidden="true" class="ki ki-close"></i>
                     </button>
@@ -165,33 +164,19 @@
                 <div class="modal-body">
 
                     <div class="form-group">
-                        <label>Name</label>
-                        <input class="form-control" required minlength="3" maxlength="20" name="name" placeholder="subject name" />
+                        <input class="form-control" required minlength="3" maxlength="20" name="subjectName" placeholder="subject name" />
+                        <small class="text-muted">Subject will be added to <b>@Model.Name</b> if it it exits, else, it'll be created</small>
                     </div>
+                    <input name="courseId" value="@Model.Id" class="d-none" />
 
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary font-weight-bold">Create subject</button>
+                    <button type="submit" class="btn btn-primary font-weight-bold">Add subject</button>
                 </div>
             </form>
 
 
-            <p style="margin-top: 3rem">Add new subject</p>
-
-            <ul class="list-group">
-                @foreach (var s in otherSubjects)
-                {
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="col-9">@s.Name</div>
-                            <div class="col-3">
-                                <a class="btn btn-primary" asp-action="AddSubject" asp-route-CourseId="@Model.Id" asp-route-SubjectId="@s.Id">Add course</a>
-                            </div>
-                        </div>
-                    </li>
-                }
-            </ul>
         </div>
     </div>
 </div>

@@ -29,17 +29,26 @@ namespace ExamManagement.Controllers
 
         public ActionResult Details(int id) => View(db.Courses.Find(id));
 
-        public async Task<ActionResult> AddSubject(int courseId, int subjectId)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> AddSubject(int courseId, string subjectName)
         {
             var course = await db.Courses.FindAsync(courseId);
-            var subject = await db.Subjects.FindAsync(subjectId);
+            var subject = db.Subjects.SingleOrDefault(s => s.Name == subjectName);
 
-            if (course == null || subject == null)
-                return BadRequest();
+            if (course == null) return BadRequest();
+            //if (string.IsNullOrWhiteSpace(subjectName)) return BadRequest("Subject Name is required");
 
-            if (!db.CourseSubjects.Any(s => s.SubjectId == subjectId && s.CourseId == courseId))
+            if (subject == null)  // create subject if it doesn't exist
             {
-                var courseSubject = new CourseSubject { CourseId = courseId, SubjectId = subjectId, AddedOn = DateTime.Now };
+                subject = new Subject { Name = subjectName, CreatedOn = DateTime.Now };
+                db.Subjects.Add(subject);
+                await db.SaveChangesAsync();
+            }
+
+            if (!db.CourseSubjects.Any(s => s.SubjectId == subject.Id  && s.CourseId == courseId))
+            {
+                var courseSubject = new CourseSubject { CourseId = courseId, SubjectId = subject.Id, AddedOn = DateTime.Now };
                 db.CourseSubjects.Add(courseSubject);
                 await db.SaveChangesAsync();
             }
