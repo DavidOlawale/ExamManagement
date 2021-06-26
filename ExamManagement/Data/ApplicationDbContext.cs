@@ -23,6 +23,9 @@ namespace ExamManagement.Data
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<CourseSubject> CourseSubjects { get; set; }
         public DbSet<StudentCourse> StudentCourses { get; set; }
+        public DbSet<ExamSchedule> ExamSchedules { get; set; }
+        public DbSet<ExamScheduleSubject> ExamScheduleSubjects { get; set; }
+        public DbSet<ExamScheduleEnrollment> ExamScheduleEnrollments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

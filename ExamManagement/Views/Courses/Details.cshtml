@@ -59,14 +59,12 @@
                             </div>
                         </div>
 
-
                     </div>
-                    <div class="p-5 mx-5">
-                        Actions
-                        <hr />
-                        <a @*asp-action="DeleteCourse" asp-route-id="@Model.Id"*@ class="btn btn-danger">Delete Coure</a>
-
-                    </div>
+                    @*<div class="p-5 mx-5">
+                            Actions
+                            <hr />
+                            <a asp-action="DeleteCourse" asp-route-id=" Model.Id" class="btn btn-danger">Delete Coure</a>
+                        </div>*@
                 </div>
                 <div class="tab-pane" id="second" role="tabpanel" aria-labelledby="second-tab">
                     <div class="row mx-3">
@@ -75,26 +73,23 @@
                                 <button class="btn btn-primary" data-toggle="modal" data-target="#newSubjectModal">Add Subject</button>
                             </div>
 
-                                <ul class="list-group mt-12">
-                                    @foreach (var s in Model.CourseSubjects)
-                                    {
-                                        <li class="list-group-item">
-                                            <div class="row">
-                                                <div class="col-10">
-                                                    <span>@s.Subject.Name</span> <br />
-                                                    <small class="text-muted">added on @s.AddedOn.ToLongDateString()</small>
-                                                </div>
-                                                <div class="col-2 d-flex">
-                                                    <a class="ml-auto my-auto" asp-action="RemoveSubject" asp-route-CourseId="@Model.Id" asp-route-SubjectId="@s.Subject.Id"><i class="fa fa-times text-danger"></i></a>
-                                                </div>
+                            <ul class="list-group mt-12">
+                                @foreach (var s in Model.CourseSubjects)
+                                {
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-10">
+                                                <span>@s.Subject.Name</span> <br />
+                                                <small class="text-muted">added on @s.AddedOn.ToLongDateString()</small>
                                             </div>
-                                        </li>
-                                    }
+                                            <div class="col-2 d-flex">
+                                                <a class="ml-auto my-auto" asp-action="RemoveSubject" asp-route-CourseId="@Model.Id" asp-route-SubjectId="@s.Subject.Id"><i class="fa fa-times text-danger"></i></a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                }
 
-                                </ul>
-
-
-                                
+                            </ul>
 
                         </div>
                     </div>
@@ -129,7 +124,7 @@
                     <div class="row mx-3">
                         <div class="col-10">
 
-                            <a href="#" class="btn btn-primary  float-right">Schedule New Eam</a>
+                            <button data-toggle="modal" data-target="#scheduleExamModal" class="btn btn-primary">Schedule new exam</button>
 
                             <p style="margin-top: 3rem;">Past Exams</p>
                             <p class="mt-5 text-muted">No exam has been taken for <span class="font-weight-bolder">@Model.Name</span></p>
@@ -149,8 +144,6 @@
 
 
 
-
-
 <!-- Create new subject Modal-->
 <div class="modal fade" id="newSubjectModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -159,6 +152,41 @@
 
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Add subject to <b>@Model.Name</b></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i aria-hidden="true" class="ki ki-close"></i>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input class="form-control" required minlength="3" maxlength="20" name="subjectName" placeholder="subject name" />
+                        <small class="text-muted">Subject will be added to <b>@Model.Name</b> if it it exits, else, it'll be created</small>
+                    </div>
+                    <input name="courseId" value="@Model.Id" class="d-none" />
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary font-weight-bold">Add subject</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!-- Schedule exam Modal-->
+<div class="modal fade" id="scheduleExamModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form asp-controller="courses" asp-action="addSubject">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Schedule an exam for <b>@Model.Name</b></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <i aria-hidden="true" class="ki ki-close"></i>
                     </button>
@@ -177,7 +205,6 @@
                     <button type="submit" class="btn btn-primary font-weight-bold">Add subject</button>
                 </div>
             </form>
-
 
         </div>
     </div>

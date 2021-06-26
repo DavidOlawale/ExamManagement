@@ -20,5 +20,6 @@ namespace ExamManagement.Models
         public DateTime RegistrationDate { get; set; }
 
         public virtual IEnumerable<StudentCourse> StudentCourses { get; set; }
+        public virtual IEnumerable<ExamScheduleEnrollment> ExamScheduleEnrollments { get; set; }
     }
 }

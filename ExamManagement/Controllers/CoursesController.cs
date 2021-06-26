@@ -37,7 +37,7 @@ namespace ExamManagement.Controllers
             var subject = db.Subjects.SingleOrDefault(s => s.Name == subjectName);
 
             if (course == null) return BadRequest();
-            //if (string.IsNullOrWhiteSpace(subjectName)) return BadRequest("Subject Name is required");
+            if (string.IsNullOrWhiteSpace(subjectName)) return BadRequest("Subject Name is required");
 
             if (subject == null)  // create subject if it doesn't exist
             {
