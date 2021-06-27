@@ -89,6 +89,8 @@ namespace ExamManagement.Controllers
 
         public async Task<ActionResult> ScheduleExam(CreateExamScheduleViewModel viewModel)
         {
+            if (viewModel.ExamDate.Date >= DateTime.Now.AddDays(1).Date) return BadRequest("Exam Date must be greater than the current date");
+
             var examSchedule = new ExamSchedule
             {
                 CourseId = viewModel.CourseId,

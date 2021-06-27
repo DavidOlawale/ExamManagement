@@ -43,7 +43,7 @@
 
                                     @if (!Model.ExamScheduleEnrollments.Any(e => e.ExamScheduleId == schedule.Id)) // if student has not enrolled
                                     {
-                                        <td><a class="btn btn-link" asp-action="enroll">Enroll</a></td>
+                                        <td><a class="btn btn-link" asp-controller="exam" asp-action="enroll" asp-route-studentId="@Model.Id" asp-route-scheduleId="@schedule.Id">Enroll</a></td>
                                     }
                                     else
                                     {

@@ -49,7 +49,7 @@
                 <h6 class="font-weight-bold">Exam</h6>
                 @if (upcomingSchedules.Any())
                 {
-                    var schedule = upcomingSchedules.First();
+                    var schedule = upcomingSchedules.OrderBy(s => s.ExamDate).First();
                     <div class="mb-5" style="color: #595963 !important">
                         <span class="">Exam for <b>@studentCourse.Name</b> </span> <br />
                         <span class="">on <b>@schedule.ExamDate.ToLongDateString()</b></span><br />
