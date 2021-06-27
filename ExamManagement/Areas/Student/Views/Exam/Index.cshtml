@@ -1,0 +1,81 @@
+﻿@model Student
+
+@{
+    var studentCourse = Model.StudentCourses.FirstOrDefault().Course;
+}
+
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body" style="min-height: 30rem">
+                <h4 class="mb-10">Exam Schedules</h4>
+
+
+                <ul class="nav nav-tabs separator-tabs ml-0 mb-5" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="first-tab" data-toggle="tab" href="#first" role="tab"
+                           aria-controls="first" aria-selected="false">UPCOMING SCHEDULE</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="second-tab" data-toggle="tab" href="#second" role="tab"
+                           aria-controls="second" aria-selected="false">PAST SCHEDULE</a>
+                    </li>
+
+                </ul>
+
+
+                <div class="tab-content">
+                    <div class="tab-pane show active p-4" id="first" role="tabpanel" aria-labelledby="first-tab">
+                        <table class="table">
+                            <tr>
+                                <th>Date</th>
+                                <th>Venue</th>
+                                <th>Subjects</th>
+                                <th></th>
+                            </tr>
+                            @foreach (var schedule in studentCourse.ExamSchedules.Where(s => s.ExamDate > DateTime.Now).OrderBy( s => Model.ExamScheduleEnrollments.Any(e => e.ExamScheduleId == s.Id)))
+                            {
+                                <tr>
+                                    <td>@schedule.ExamDate.ToShortDateString()</td>
+                                    <td>@schedule.ExamVenue</td>
+                                    <td>@string.Join(", ", schedule.ExamScheduleSubjects.Select(s => s.Subject.Name))</td>
+
+                                    @if (!Model.ExamScheduleEnrollments.Any(e => e.ExamScheduleId == schedule.Id)) // if student has not enrolled
+                                    {
+                                        <td><a class="btn btn-link" asp-action="enroll">Enroll</a></td>
+                                    }
+                                    else
+                                    {
+                                        <td><span class="label label-inline label-pill label-success">Enrolled</span></td>
+                                    }
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                    <div class="tab-pane" id="second" role="tabpanel" aria-labelledby="second-tab">
+                        <table class="table">
+                            <tr>
+                                <th>Date</th>
+                                <th>Venue</th>
+                                <th>Subjects</th>
+                            </tr>
+                            @foreach (var schedule in studentCourse.ExamSchedules.Where(s => s.ExamDate <= DateTime.Now && Model.ExamScheduleEnrollments.Any(e => e.ExamScheduleId == s.Id)))
+                            {
+                                <tr>
+                                    <td>@schedule.ExamDate.ToShortDateString()</td>
+                                    <td>@schedule.ExamVenue</td>
+                                    <td>@string.Join(", ", schedule.ExamScheduleSubjects.Select(s => s.Subject.Name))</td>
+
+                                </tr>
+                            }
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>

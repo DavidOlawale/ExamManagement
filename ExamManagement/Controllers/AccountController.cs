@@ -45,7 +45,7 @@ namespace ExamManagement.Controllers
             if (result.Succeeded)
                 return LocalRedirect(returnUrl);
 
-            ModelState.AddModelError("", "Invalid SignIn attempt");
+            ModelState.AddModelError("", "Invalid Sign In attempt");
             return View();
         }
 

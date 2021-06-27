@@ -132,14 +132,37 @@
                     <div class="row mx-3">
                         <div class="col-10">
 
-                            <button data-toggle="modal" data-target="#scheduleExamModal" class="btn btn-primary">Schedule new exam</button>
+                            <button data-toggle="modal" data-target="#scheduleExamModal" class="btn btn-primary mb-10">Schedule new exam</button>
 
                             @if (!Model.ExamSchedules.Any())
                             {
-
+                                <p class="mt-5 text-muted">you have not created any exam schedule for <span class="font-weight-bolder">@Model.Name</span></p>
                             }
-                            <p style="margin-top: 3rem;">Past Exams</p>
-                            <p class="mt-5 text-muted">No exam has been taken for <span class="font-weight-bolder">@Model.Name</span></p>
+                            else
+                            {
+                                <table class="table">
+                                    <tr>
+                                        <th>Exam Date</th>
+                                        <th>Venue</th>
+                                        <th>Subjects</th>
+                                        <th>Status</th>
+                                    </tr>
+                                    @foreach (var exam in Model.ExamSchedules.OrderByDescending(e => e.ExamDate))
+                                    {
+                                        <tr>
+                                            <td>@exam.ExamDate.ToShortDateString()</td>
+                                            <td>@exam.ExamVenue</td>
+                                            <td>@string.Join(", ", exam.ExamScheduleSubjects.Select(s => s.Subject.Name))</td>
+                                            <td>
+                                                <span class="label label-inline label-pill @(exam.ExamDate < DateTime.Now ? "label-danger" : "label-success")">@(exam.ExamDate < DateTime.Now ? "Past" : "Upcoming")</span>
+                                                
+                                            </td>
+                                            
+                                        </tr>
+                                    }
+                                </table>
+                            }
+
                         </div>
                     </div>
 
@@ -208,7 +231,7 @@
 
                     <div class="form-group">
                         <label for="scheduleDate">Exam date and time</label>
-                        <input class="form-control" id="scheduleDate" required type="datetime-local" value="" name="viewModel.ExamDate" />
+                        <input class="form-control" id="scheduleDate" min="@DateTime.Now.ToString("yyyy-MM-dd")" required type="datetime-local" value="" name="viewModel.ExamDate" />
                     </div>
 
                     <div class="form-group">

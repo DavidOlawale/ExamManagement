@@ -10,7 +10,7 @@ namespace ExamManagement.Models
 
         public int Id { get; set; }
         public DateTime EnrolledOn { get; set; }
-        public int StudentId { get; set; }
+        public string StudentId { get; set; }
         public virtual Student Student { get; set; }
         public int ExamScheduleId { get; set; }
         public virtual ExamSchedule ExamSchedule { get; set; }
