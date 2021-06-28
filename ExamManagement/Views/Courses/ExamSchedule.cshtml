@@ -1,0 +1,90 @@
+﻿@model ExamSchedule
+
+<div class="container-fluid">
+    <div class="card card-custom">
+        <div class="card-header flex-wrap py-5">
+            <div class="card-title">
+                <h3 class="card-label">
+                    Exam schedule
+                    @if (Model.ExamDate > DateTime.Now)
+                    {
+
+                        <span class="label label-pill label-inline label-success">Upcoming</span>
+                    }
+                    else
+                    {
+
+                        <span class="label label-pill label-inline label-danger">Past</span>
+                    }
+
+                </h3>
+            </div>
+
+        </div>
+        <div class="card-body min-h-200px">
+            <div class="row">
+                <div class="col-11">
+                    <div class="row text-center ">
+                        <div class="col-3">
+                            <p class="text-muted mb-2">Exam Date</p>
+                            <p class="mb-5">@Model.ExamDate.ToLongDateString()</p>
+                        </div>
+
+                        <div class="col-3">
+                            <p class="text-muted mb-2">Course</p>
+                            <p class="mb-5">@Model.Course.Name</p>
+                        </div>
+
+                        <div class="col-3">
+                            <p class="text-muted mb-2">Subjects</p>
+                            <p class="mb-5">@string.Join(", ", Model.ExamScheduleSubjects.Select(s => s.Subject.Name)) </p>
+                        </div>
+
+                        <div class="col-3">
+                            <p class="text-muted mb-2">No Of Enrolled students</p>
+                            <p class="mb-5">@Model.ExamScheduleEnrollments.Count()</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="mt-20">
+                <h5 class="mb-5">Enrolled Students</h5>
+                <table class="table" id="students">
+                    <thead>
+                        <tr>
+                            <th>Student name</th>
+                            <th>Email</th>
+                            <th>Enrolled On</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var e in Model.ExamScheduleEnrollments)
+                        {
+                            <tr>
+                                <td>@e.Student.FirstName @e.Student.LastName</td>
+                                <td>@e.Student.Email</td>
+                                <td>@e.EnrolledOn.ToShortDateString()</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section styles{
+    <link rel="stylesheet" href="/assets/plugins/custom/datatables/datatables.bundle.css" />
+}
+
+@section scripts{
+    <script src="/assets/plugins/custom/datatables/datatables.bundle.js"></script>
+    <script>
+        $('#students').DataTable()
+    </script>
+}

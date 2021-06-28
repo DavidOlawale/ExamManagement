@@ -147,6 +147,7 @@
                                             <th>Venue</th>
                                             <th>Subjects</th>
                                             <th>Status</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -160,6 +161,7 @@
                                                     <span class="label label-inline label-pill @(exam.ExamDate < DateTime.Now ? "label-danger" : "label-success")">@(exam.ExamDate < DateTime.Now ? "Past" : "Upcoming")</span>
 
                                                 </td>
+                                                <td><a asp-action="ExamSchedule" asp-route-id="@exam.Id">View details</a></td>
 
                                             </tr>
                                         }

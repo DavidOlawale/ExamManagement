@@ -113,5 +113,10 @@ namespace ExamManagement.Controllers
             CreateNofification(NotificationType.Success, $"Exam has been sheduled for {course.Name}");
             return RedirectToAction("Details", new {id= viewModel.CourseId });
         }
+
+        public ActionResult ExamSchedule(int id)
+        {
+            return View(db.ExamSchedules.Find(id));
+        }
     }
 }
