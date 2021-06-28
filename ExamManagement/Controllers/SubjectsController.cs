@@ -25,7 +25,5 @@ namespace ExamManagement.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult Details(int id) => View(db.Subjects.Find(id));
-
     }
 }
