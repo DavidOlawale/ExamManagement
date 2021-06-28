@@ -38,16 +38,18 @@ namespace ExamManagement.Controllers
             returnUrl = returnUrl ?? Url.Content("~/");
             var result = await signInManager.PasswordSignInAsync(signInModel.Email, signInModel.Password, signInModel.keepSignedIn, false);
 
-            var a = db.Students.ToList();
-            if (db.Students.ToList().Any(s => s.Email.Equals(signInModel.Email, StringComparison.OrdinalIgnoreCase))) // if user is a student
-                return RedirectToAction("Index", "Home", new { Area = "Student" });
-
             if (result.Succeeded)
+            {
+                var a = db.Students.ToList();
+                if (db.Students.ToList().Any(s => s.Email.Equals(signInModel.Email, StringComparison.OrdinalIgnoreCase))) // if user is a student
+                    return RedirectToAction("Index", "Home", new { Area = "Student" });
+
+
+                CreateNofification(NotificationType.Success, $"Welcome back");
                 return LocalRedirect(returnUrl);
+            }
 
-            ModelState.AddModelError("", "Invalid Sign In attempt");
-
-            CreateNofification(NotificationType.Success, $"Welcome back");
+            CreateNofification(NotificationType.Error, "incorrect email or password");
             return View();
         }
 
