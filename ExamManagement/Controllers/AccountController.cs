@@ -46,6 +46,8 @@ namespace ExamManagement.Controllers
                 return LocalRedirect(returnUrl);
 
             ModelState.AddModelError("", "Invalid Sign In attempt");
+
+            CreateNofification(NotificationType.Success, $"Welcome back");
             return View();
         }
 
@@ -95,6 +97,8 @@ namespace ExamManagement.Controllers
             var studentCourse = new StudentCourse { CourseId = model.CourseId, StudentId = student.Id };
             db.StudentCourses.Add(studentCourse);
             await db.SaveChangesAsync();
+
+            CreateNofification(NotificationType.Success, $"Welcome {model.Student.FirstName}");
             return RedirectToAction("Index", "Home", new { area = "Student", });
         }
     }

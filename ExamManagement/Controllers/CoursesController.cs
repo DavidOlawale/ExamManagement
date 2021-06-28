@@ -25,6 +25,7 @@ namespace ExamManagement.Controllers
             await db.Courses.AddAsync(course);
             await db.SaveChangesAsync();
 
+            CreateNofification(NotificationType.Success, $"{course.Name} has been created");
             return RedirectToAction("Index");
         }
 
@@ -53,7 +54,7 @@ namespace ExamManagement.Controllers
                 db.CourseSubjects.Add(courseSubject);
                 await db.SaveChangesAsync();
             }
-            
+            CreateNofification(NotificationType.Success, $"{subject.Name} has been added to {course.Name}");
             return RedirectToAction("Details", new { id = courseId });
         }
 
@@ -72,7 +73,7 @@ namespace ExamManagement.Controllers
                 db.CourseSubjects.Remove(courseSubject);
                 await db.SaveChangesAsync();
             }
-
+            CreateNofification(NotificationType.Success, $"{subject.Name} has been removed from {course.Name}");
             return RedirectToAction("Details", new { id = courseId });
         }
 
@@ -89,7 +90,20 @@ namespace ExamManagement.Controllers
 
         public async Task<ActionResult> ScheduleExam(CreateExamScheduleViewModel viewModel)
         {
-            if (viewModel.ExamDate.Date >= DateTime.Now.AddDays(1).Date) return BadRequest("Exam Date must be greater than the current date");
+            var course = db.Courses.Find(viewModel.CourseId);
+            if (viewModel.ExamDate.Date < DateTime.Now.AddDays(1).Date) {
+                CreateNofification(NotificationType.Error, "Exam date must be greater than today's date");
+                return RedirectToAction("Details", new { id = viewModel.CourseId });
+            }
+
+            if (!viewModel.Subjects.Any(s => s.IsAdded))
+            {
+                CreateNofification(NotificationType.Error, "At least one subject must be selected");
+                return RedirectToAction("Details", new { id = viewModel.CourseId });
+            }
+
+
+            if (course == null) return BadRequest();
 
             var examSchedule = new ExamSchedule
             {
@@ -107,6 +121,7 @@ namespace ExamManagement.Controllers
             }
 
             await db.SaveChangesAsync();
+            CreateNofification(NotificationType.Success, $"Exam has been sheduled for {course.Name}");
             return RedirectToAction("Details", new {id= viewModel.CourseId });
         }
     }

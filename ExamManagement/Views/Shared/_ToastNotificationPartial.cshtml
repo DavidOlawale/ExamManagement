@@ -1,0 +1,36 @@
+﻿@using ExamManagement.Controllers
+@{
+    NotificationModel notification = null;
+    //TempData.Remove("Notification");
+
+    if (TempData["Notification"] != null)
+    {
+        notification = Newtonsoft.Json.JsonConvert.DeserializeObject<NotificationModel>(TempData["Notification"].ToString());
+    }
+}
+
+@if (notification != null)
+{
+    <script>
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": true,
+            "progressBar": true,
+            "positionClass": "toast-bottom-right",
+            "preventDuplicates": false,
+            "showDuration": "2000",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+
+        toastr.@notification.Type ("@notification.Message", "@notification.Title");
+    </script>
+
+    TempData.Remove("Notification");
+}

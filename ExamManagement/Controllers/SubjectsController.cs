@@ -21,6 +21,7 @@ namespace ExamManagement.Controllers
             await db.Subjects.AddAsync(subject);
             await db.SaveChangesAsync();
 
+            CreateNofification(NotificationType.Success, $"{subject.Name} has been created", "title");
             return RedirectToAction("Index");
         }
 
