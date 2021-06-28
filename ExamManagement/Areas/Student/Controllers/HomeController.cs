@@ -16,10 +16,7 @@ namespace ExamManagement.Areas.Student.Controllers
             db = dbContext;
             this.userManager = userManager;
         }
-        public IActionResult Index()
-        {
-            var student = db.Students.Find(userManager.GetUserId(User));
-            return View(student);
-        }
+        public IActionResult Index() => View(db.Students.Find(userManager.GetUserId(User)));
+        
     }
 }

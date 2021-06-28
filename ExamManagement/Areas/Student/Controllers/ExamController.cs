@@ -45,8 +45,13 @@ namespace ExamManagement.Areas.Student.Controllers
                     };
                     db.ExamScheduleEnrollments.Add(scheduleEnrolment);
                     await db.SaveChangesAsync();
+
+                    CreateNofification(ExamManagement.Controllers.NotificationType.Success, "Enrollment successfull");
                 }
             }
+            else
+                CreateNofification(ExamManagement.Controllers.NotificationType.Error, "you have already enrolled for this exam");
+
             return RedirectToAction("index");
         }
     }

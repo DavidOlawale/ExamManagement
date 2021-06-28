@@ -42,8 +42,10 @@ namespace ExamManagement.Controllers
             {
                 var a = db.Students.ToList();
                 if (db.Students.ToList().Any(s => s.Email.Equals(signInModel.Email, StringComparison.OrdinalIgnoreCase))) // if user is a student
+                {
+                    CreateNofification(NotificationType.Success, $"Welcome back");
                     return RedirectToAction("Index", "Home", new { Area = "Student" });
-
+                }
 
                 CreateNofification(NotificationType.Success, $"Welcome back");
                 return LocalRedirect(returnUrl);

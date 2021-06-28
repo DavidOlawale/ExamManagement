@@ -2,6 +2,7 @@
 @model Student
 
 @{ 
+    ViewBag.Title = "Dashboard";
     var studentCourse = Model.StudentCourses.FirstOrDefault().Course;
     var upcomingSchedules = studentCourse.ExamSchedules.Where(s => s.ExamDate > DateTime.Now && !Model.ExamScheduleEnrollments.Any(e => e.ExamScheduleId == s.Id));
 }
