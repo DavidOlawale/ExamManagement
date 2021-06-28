@@ -130,7 +130,7 @@
 
                 <div class="tab-pane" id="fourth" role="tabpanel" aria-labelledby="fourth-tab">
                     <div class="row mx-3">
-                        <div class="col-10">
+                        <div class="col-12">
 
                             <button data-toggle="modal" data-target="#scheduleExamModal" class="btn btn-primary mb-10">Schedule new exam</button>
 
@@ -140,26 +140,31 @@
                             }
                             else
                             {
-                                <table class="table">
-                                    <tr>
-                                        <th>Exam Date</th>
-                                        <th>Venue</th>
-                                        <th>Subjects</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    @foreach (var exam in Model.ExamSchedules.OrderByDescending(e => e.ExamDate))
-                                    {
+                                <table class="table" id="schedules">
+                                    <thead>
                                         <tr>
-                                            <td>@exam.ExamDate.ToShortDateString()</td>
-                                            <td>@exam.ExamVenue</td>
-                                            <td>@string.Join(", ", exam.ExamScheduleSubjects.Select(s => s.Subject.Name))</td>
-                                            <td>
-                                                <span class="label label-inline label-pill @(exam.ExamDate < DateTime.Now ? "label-danger" : "label-success")">@(exam.ExamDate < DateTime.Now ? "Past" : "Upcoming")</span>
-                                                
-                                            </td>
-                                            
+                                            <th>Exam Date</th>
+                                            <th>Venue</th>
+                                            <th>Subjects</th>
+                                            <th>Status</th>
                                         </tr>
-                                    }
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var exam in Model.ExamSchedules.OrderByDescending(e => e.ExamDate))
+                                        {
+                                            <tr>
+                                                <td>@exam.ExamDate.ToShortDateString()</td>
+                                                <td>@exam.ExamVenue</td>
+                                                <td>@string.Join(", ", exam.ExamScheduleSubjects.Select(s => s.Subject.Name))</td>
+                                                <td>
+                                                    <span class="label label-inline label-pill @(exam.ExamDate < DateTime.Now ? "label-danger" : "label-success")">@(exam.ExamDate < DateTime.Now ? "Past" : "Upcoming")</span>
+
+                                                </td>
+
+                                            </tr>
+                                        }
+                                    </tbody>
+                                    
                                 </table>
                             }
 
@@ -264,3 +269,14 @@
         </div>
     </div>
 </div>
+
+@section styles{ 
+    <link rel="stylesheet" href="/assets/plugins/custom/datatables/datatables.bundle.css" />
+}
+
+@section scripts{ 
+    <script src="/assets/plugins/custom/datatables/datatables.bundle.js"></script>
+    <script>
+        $('#schedules').DataTable()
+    </script>
+}
